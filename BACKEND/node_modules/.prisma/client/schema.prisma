@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model escolaridad {
+  id_escolaridad Int        @id @default(autoincrement())
+  nivel          String?    @db.VarChar(1000)
+  usuarios       usuarios[]
+}
+
+model habilidades {
+  id_habilidad        Int                   @id @default(autoincrement())
+  habilidad           String?               @db.VarChar(1000)
+  usuario_habilidades usuario_habilidades[]
+}
+
+model usuario_habilidades {
+  id_usuario_habilidades Int          @id @default(autoincrement())
+  id_usuario             Int?
+  id_habilidad           Int?
+  habilidades            habilidades? @relation(fields: [id_habilidad], references: [id_habilidad], onDelete: Cascade, onUpdate: NoAction)
+  usuarios               usuarios?    @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model usuarios {
+  id_usuario          Int                   @id @default(autoincrement())
+  curp                String?               @db.VarChar(1000)
+  nombre              String?               @db.VarChar(1000)
+  apellidos           String?               @db.VarChar(1000)
+  direccion           String?               @db.VarChar(3000)
+  fecha_nacimiento    DateTime?             @db.Date
+  correo_electronico  String?               @db.VarChar(1000)
+  contrase_a          String?               @map("contraseña") @db.VarChar(2000)
+  id_escolaridad      Int?
+  fotografia          String?               @db.VarChar(1000)
+  usuario_habilidades usuario_habilidades[]
+  escolaridad         escolaridad?          @relation(fields: [id_escolaridad], references: [id_escolaridad], onDelete: Cascade, onUpdate: NoAction)
+}

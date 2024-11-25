@@ -1,0 +1,9 @@
+const router = require('express').Router()
+const {UsuarioHabilidadesController} = require('../controllers')
+//const { AuthMiddleware } = require('../middlewares')
+
+router.get("/obtenerUsuarioHabilidades/:id", UsuarioHabilidadesController.obtenerUsuarioHabilidades)
+router.post("/agregarUsuarioHabilidades", UsuarioHabilidadesController.agregarUsuarioHabilidades)
+router.put("/eliminarUsuarioHabilidades", UsuarioHabilidadesController.eliminarUsuarioHabilidades)
+
+module.exports = router
