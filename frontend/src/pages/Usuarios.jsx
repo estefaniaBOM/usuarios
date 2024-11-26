@@ -1,16 +1,17 @@
-import React, { Fragment } from 'react'
+import React, { useEffect } from 'react'
+import { v4 as uuidv4 } from 'uuid';
+import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { DataGrid, GridToolbarQuickFilter } from '@mui/x-data-grid'
 import Box from '@mui/material/Box'
 import { IconButton } from '@mui/material';
-import TextField from "@mui/material/TextField"
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
-import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-import LockIcon from '@mui/icons-material/Lock';
 import Button from '@mui/material/Button'
 
-function Usuarios() {
+import { obtenerTodosUsuarios } from '../redux/UsuariosDuck';
+
+function Usuarios(props) {
 
   const theme = createTheme({
     palette: {
@@ -37,6 +38,33 @@ function Usuarios() {
       },
     }
   });
+
+  const dispatch = useDispatch()
+  const usuarios = useSelector(store => store.Usuarios.data)
+
+  const [flag, setFlag] = React.useState(false);
+
+
+
+  console.log("usuario: ", usuarios)
+
+  React.useEffect(() => {
+    dispatch(obtenerTodosUsuarios())
+    
+  }, [])
+
+  React.useEffect(() => {
+    if(flag === false){
+      dispatch(obtenerTodosUsuarios())
+    }
+
+    setFlag(true)
+  }, [usuarios])
+
+  const handleRegistrarUsuario = async () => {
+    props.history.push('/RegistrarEditarUsuario')
+    window.location.reload();
+  }
 
   function QuickSearchToolbar() {
     return (
@@ -76,10 +104,26 @@ function Usuarios() {
     { field: 'habilidades', headerName: 'HABILIDADES', headerAlign: 'center', flex: .2, sortable: false },
   ]
 
-  const rows = [
-    { id: 1, nombre: 'Estefania Ortega', curp: 'OEME970314MMCRRS03', direccion: 'Oaxaca Centro', fechaNacimiento: '14 Marzo 1997', nivelEscolaridad: 'Superior', habilidades: '---' },
-    { id: 2, nombre: 'Estefania Berenice', curp: 'OEME970314MMCRRS03', direccion: 'Querétaro', fechaNacimiento: '09 Diciembre 1997', nivelEscolaridad: 'Superior', habilidades: '---' }
-  ];
+  const rows = []
+
+  usuarios?.map(usuario => {
+
+    let aux = []
+    usuario?.usuario_habilidades?.map(habilidad => (
+      aux.push(habilidad.habilidades?.habilidad)
+    ))
+
+    rows.push({
+      id: uuidv4(), nombre: usuario.nombre + ' ' + usuario.apellidos, curp: usuario.curp, direccion: usuario.direccion,
+      fechaNacimiento: usuario.fecha_nacimiento.substring(0, 10), nivelEscolaridad: usuario.escolaridad?.nivel, habilidades: aux.join(', '), 
+      informacionUsuario: usuario
+    })
+  })
+
+  //const rows = [
+  //  { id: 1, nombre: 'Estefania Ortega', curp: 'OEME970314MMCRRS03', direccion: 'Oaxaca Centro', fechaNacimiento: '14 Marzo 1997', nivelEscolaridad: 'Superior', habilidades: '---' },
+  //  { id: 2, nombre: 'Estefania Berenice', curp: 'OEME970314MMCRRS03', direccion: 'Querétaro', fechaNacimiento: '09 Diciembre 1997', nivelEscolaridad: 'Superior', habilidades: '---' }
+  //];
 
 
   return (
@@ -88,7 +132,7 @@ function Usuarios() {
         <div className="container m-5" style={{ width: '100%' }}>
           <h3 className='text-center'>Usuarios</h3>
           <div className="m-3 d-flex justify-content-end">
-            <Button variant="contained" color="primary" style={{ width: '20%' }} >Registrar nuevo usuario</Button>
+            <Button variant="contained" color="primary" style={{ width: '20%' }} onClick={() => handleRegistrarUsuario()}>Registrar nuevo usuario</Button>
           </div>
           <div className='mt-3 pe-2' style={{ width: '100%', color: '#202c49', padding: 0 }}>
             <DataGrid

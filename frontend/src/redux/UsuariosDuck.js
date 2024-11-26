@@ -4,31 +4,17 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 /**DATOS INICIALES */
 const dataInicial = {
-    data: {},
+    data: [],
 }
 
-const ACTUALIZAR_CLIENTE_EXITO = 'ACTUALIZAR_CLIENTE_EXITO'
-const OBTENER_CLIENTE_POR_ID_LOGIN_EXITO = 'OBTENER_CLIENTE_POR_ID_LOGIN_EXITO'
-const OBTENER_CADENA_PRODUCTIVA_POR_ID_LOGIN_EXITO = 'OBTENER_CADENA_PRODUCTIVA_POR_ID_LOGIN_EXITO'
-const CLIENTE_BY_NUMSOCIO = 'CLIENTE_BY_NUMSOCIO'
+const OBTENER_TODOS_USUARIOS = 'OBTENER_TODOS_USUARIOS'
+const AGREGAR_USUARIO = 'AGREGAR_USUARIO'
 
-export const actualizarCliente = createAsyncThunk(
-    ACTUALIZAR_CLIENTE_EXITO,
-    async (data) => {
+export const obtenerTodosUsuarios = createAsyncThunk(
+    OBTENER_TODOS_USUARIOS,
+    async () => {
         try {
-            const fullUrl = host + `InformacionValida/actualizarCliente`
-            const res = await axios.put(fullUrl, {data: data})
-        } catch (error) {
-            console.log(error)
-        }
-    }
-)
-
-export const obtenerClienteByIdLogin = createAsyncThunk(
-    OBTENER_CLIENTE_POR_ID_LOGIN_EXITO,
-    async (idLogin) => {
-        try {
-            const fullUrl = host + `InformacionValida/obtenerClienteByIdLogin/${idLogin}`
+            const fullUrl = host + `Usuarios/obtenerTodosUsuarios`
             const res = await axios.get(fullUrl)
             return res.data.data
         } catch (error) {
@@ -37,35 +23,26 @@ export const obtenerClienteByIdLogin = createAsyncThunk(
     }
 )
 
-export const obtenerCadenaProductivaPorLogin = createAsyncThunk(
-    OBTENER_CADENA_PRODUCTIVA_POR_ID_LOGIN_EXITO,
-    async (idLogin) => {
+export const agregarUsuario = createAsyncThunk(
+    AGREGAR_USUARIO,
+    async (data) => {
         try {
-            const fullUrl = host + `InformacionValida/obtenerCadenaProductivaPorLogin/${idLogin}`
-            const res = await axios.get(fullUrl)
-            if(res.data.data){
-                const cadenaP = {}
-                for (const i in res.data.data.cliente[0]?.actividadcliente) {
-                    const {...actividad} = res.data.data.cliente[0]?.actividadcliente[i]
-                    cadenaP[actividad.tipoactividad.actividad] = true
-                }
-                return cadenaP
-            }
-            return {}
-        } catch (error) {
-            console.log(error)
-        }
-    }
-)
+            const urlAgregarUsuario = host + `Usuarios/agregarUsuario`
+            const urlAgregarUsuarioHabilidades = host + `UsuarioHabilidades/agregarUsuarioHabilidades`
 
-export const getClienteByNumsocio = createAsyncThunk(
-    CLIENTE_BY_NUMSOCIO,
-    async (numerosocio) => {
-        try {
-            const fullUrl = host + `InformacionValida/obtenerClienteConDetalleByNumeroSocio/${numerosocio}`
-            const res = await axios.get(fullUrl)
-            //console.log('Se obtienen los Coches: '+JSON.stringify(res))
-            return res
+            const resUsuarios = await axios.post(urlAgregarUsuario, { data: data.dataUsuario })
+
+            for (const i in data?.dataUsuarioHabilidades){
+
+                let usuarioHabilidades = {
+                    id_usuario: Number(resUsuarios?.data?.data?.id_usuario),
+                    id_habilidad: Number(data?.dataUsuarioHabilidades?.[i])
+                }
+
+                await axios.post(urlAgregarUsuarioHabilidades, { data: usuarioHabilidades })
+
+            }
+            return resUsuarios.data.data
         } catch (error) {
             console.log(error);
         }
@@ -78,15 +55,8 @@ export const UsuariosSlice = createSlice({
     reducers: {
     },
     extraReducers: {
-        [actualizarCliente.fulfilled] : (state, {payload}) => {
-        },
-        [obtenerClienteByIdLogin.fulfilled] : (state, {payload}) => {
-        },
-        [obtenerCadenaProductivaPorLogin.fulfilled] : (state, {payload}) => {
-            state.cadenaProductiva = payload
-        },
-        [getClienteByNumsocio.fulfilled] : (state, {payload}) => {
-            state.cadenaProductiva = payload
+        [obtenerTodosUsuarios.fulfilled] : (state, {payload}) => {
+            state.data = payload
         },
     },
 })

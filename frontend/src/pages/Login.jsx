@@ -6,7 +6,7 @@ import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import LockIcon from '@mui/icons-material/Lock';
 import Button from '@mui/material/Button'
 
-function Login() {
+function Login(props) {
 
   const theme = createTheme({
     palette: {
@@ -34,6 +34,10 @@ function Login() {
     }
   });
 
+  const handleIniciarSesion = async () => {
+    props.history.push('/Usuarios')
+    window.location.reload();
+  }
 
   return (
     <div style={{backgroundColor: '#b5cdf9', minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center',  }}>
@@ -50,7 +54,7 @@ function Login() {
               <TextField type="password" className='col-10 mb-2 pe-5' size='small' placeholder='contraseña' />
             </div>
             <div className="row mt-3 pb-4 justify-content-center">
-              <Button variant="contained" color="primary" style={{ width: '50%' }} >Iniciar sesión</Button>
+              <Button variant="contained" color="primary" style={{ width: '50%' }} onClick={() => handleIniciarSesion()} >Iniciar sesión</Button> 
             </div>
 
           </div>
@@ -61,3 +65,5 @@ function Login() {
 }
 
 export default withRouter(Login)
+
+//onClick={() => handleIniciarSesion()}

@@ -3,7 +3,7 @@ import { host } from '../configuraciones'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 const dataInicial = {
-    data: {},
+    data: [],
 }
 
 const OBTENER_TODOS_HABILIDADES = 'OBTENER_TODOS_HABILIDADES'
@@ -14,7 +14,7 @@ export const obtenerTodosHabilidades = createAsyncThunk(
         try {
             const fullUrl = host + `Habilidades/obtenerTodosHabilidades`
             const res = await axios.get(fullUrl)
-            return res.data
+            return res.data.data
         } catch (error) {
             console.log(error)
         }

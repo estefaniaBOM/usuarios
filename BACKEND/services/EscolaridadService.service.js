@@ -11,7 +11,6 @@ class EscolaridadService {
                 id_escolaridad: 'asc'
             }
         })
-        console.log("RETURN DE ESCOLARIDAD: ", allEscolaridad)
         return allEscolaridad
     }
 

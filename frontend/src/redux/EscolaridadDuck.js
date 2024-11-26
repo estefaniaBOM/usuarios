@@ -3,7 +3,7 @@ import { host } from '../configuraciones'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 const dataInicial = {
-    data: {},
+    data: [],
 }
 
 const OBTENER_TODOS_NIVEL_ESCOLARIDAD = 'OBTENER_TODOS_NIVEL_ESCOLARIDAD'
@@ -15,7 +15,7 @@ export const obtenerTodosEscolaridad = createAsyncThunk(
             const fullUrl = host + `Escolaridad/obtenerTodosEscolaridad`
             const res = await axios.get(fullUrl)
             console.log("DUCK ESCOLARIDAD: ", res)
-            return res
+            return res.data.data
         } catch (error) {
             console.log(error)
         }

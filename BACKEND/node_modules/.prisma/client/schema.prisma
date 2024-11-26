@@ -35,7 +35,7 @@ model usuarios {
   direccion           String?               @db.VarChar(3000)
   fecha_nacimiento    DateTime?             @db.Date
   correo_electronico  String?               @db.VarChar(1000)
-  contrase_a          String?               @map("contraseña") @db.VarChar(2000)
+  password            String?               @db.VarChar(2000)
   id_escolaridad      Int?
   fotografia          String?               @db.VarChar(1000)
   usuario_habilidades usuario_habilidades[]
