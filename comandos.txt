@@ -1,0 +1,39 @@
+FRONT END:
+
+npm install @emotion/react @emotion/styled
+npm install @mui/material @mui/styled-engine-sc styled-components
+npm install bootstrap
+npm install react-router-dom@5.2.0
+npm install redux@4.1.2 --legacy-peer-deps
+npm install react-redux@7.2.6 --legacy-peer-deps
+npm install @reduxjs/toolkit@1.7.2 --legacy-peer-deps
+npm install redux-persist@6.0.0 --legacy-peer-deps
+npm install redux-devtools-extension@2.13.9 --legacy-peer-deps
+npm install @mui/material @emotion/react @emotion/styled
+npm install @mui/x-data-grid
+npm install @mui/x-date-pickers
+npm install dayjs
+npm install moment --save
+npm install @mui/material @emotion/react @emotion/styled
+npm i @mui/icons-material@5.11.16 --legacy-peer-deps
+npm i @mui/material@5.10.16 --legacy-peer-deps
+npm i @mui/styles@5.8.0 --legacy-peer-deps 
+npm i @mui/x-data-grid@5.17.6 --legacy-peer-deps
+npm i @mui/private-theming@5.8.4 --legacy-peer-deps
+
+
+BACKEND:
+
+npm install -g aws-cli
+npm install aws-sdk
+npm install @aws-sdk/client-s3
+npm install @aws-sdk/lib-storage
+npm install multer@1.4.4 --legacy-peer-deps
+
+
+
+
+
+
+
+
